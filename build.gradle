@@ -1,0 +1,8 @@
+plugins {
+  id 'org.gradle.wrapper'
+  id 'org.gradle.java'
+}
+
+wrapper {
+  gradleVersion = '5.0'
+}
