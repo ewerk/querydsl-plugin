@@ -26,6 +26,7 @@ dependencies {
 
 test {
   minHeapSize = '128m'
+  testLogging.events 'FAILED', 'SKIPPED', 'PASSED'
 }
 
 pluginBundle {
