@@ -4,6 +4,7 @@ plugins {
   id 'java-gradle-plugin'
   id 'com.fizzpod.sweeney' version '4.0.0'
   id 'com.github.ksoichiro.build.info' version '0.2.0'
+  id 'com.gradle.plugin-publish' version '0.10.1'
 }
 
 wrapper {
@@ -21,4 +22,18 @@ repositories {
 
 dependencies {
   testCompile "org.junit.jupiter:junit-jupiter:${junitVersion}"
+}
+
+pluginBundle {
+  website = 'https://github.com/ewerk/querydsl-plugin'
+  vcsUrl = 'https://github.com/ewerk/querydsl-plugin'
+  description = 'Plugin for generating QueryDSL Q classes.'
+  tags = ['querydsl', 'ewerk']
+
+  plugins {
+    querydslPlugin {
+      id = 'com.ewerk.gradle.plugins.querydsl'
+      displayName = 'Gradle Querydsl plugin'
+    }
+  }
 }
