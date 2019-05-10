@@ -24,6 +24,10 @@ dependencies {
   testCompile "org.junit.jupiter:junit-jupiter:${junitVersion}"
 }
 
+test {
+  minHeapSize = '128m'
+}
+
 pluginBundle {
   website = 'https://github.com/ewerk/querydsl-plugin'
   vcsUrl = 'https://github.com/ewerk/querydsl-plugin'
