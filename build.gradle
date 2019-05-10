@@ -1,8 +1,15 @@
 plugins {
   id 'org.gradle.wrapper'
   id 'org.gradle.java'
+  id 'java-gradle-plugin'
+  id 'com.fizzpod.sweeney' version '4.0.0'
 }
 
 wrapper {
   gradleVersion = '5.0'
+}
+
+sweeney {
+  enforce type: 'jdk', expect: '[1.8,)'
+  enforce 'gradle:[5.0,)'
 }
