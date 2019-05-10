@@ -17,7 +17,7 @@ sweeney {
 }
 
 repositories {
-  mavenCentral()
+  jcenter()
 }
 
 dependencies {
@@ -29,6 +29,15 @@ test {
   testLogging.events 'FAILED', 'SKIPPED', 'PASSED'
 }
 
+gradlePlugin {
+  plugins {
+    querydslPlugin {
+      id = 'com.ewerk.gradle.plugins.querydsl'
+      implementationClass = 'com.ewerk.gradle.plugins.querydsl.QuerydslPlugin'
+    }
+  }
+}
+
 pluginBundle {
   website = 'https://github.com/ewerk/querydsl-plugin'
   vcsUrl = 'https://github.com/ewerk/querydsl-plugin'
@@ -37,7 +46,6 @@ pluginBundle {
 
   plugins {
     querydslPlugin {
-      id = 'com.ewerk.gradle.plugins.querydsl'
       displayName = 'Gradle Querydsl plugin'
     }
   }
