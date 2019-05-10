@@ -1,0 +1,15 @@
+sudo: false
+language: java
+
+jdk:
+  - oraclejdk9
+
+script: ./gradlew build --stacktrace -i
+
+cache:
+  directories:
+    - "$HOME/.gradle/caches"
+
+branches:
+  only:
+    - master
