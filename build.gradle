@@ -47,6 +47,7 @@ pluginBundle {
   plugins {
     querydslPlugin {
       displayName = 'Gradle Querydsl plugin'
+      description = 'A plugin for generating Querydsl Q classes.'
     }
   }
 }
