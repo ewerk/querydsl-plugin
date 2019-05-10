@@ -3,6 +3,7 @@ plugins {
   id 'org.gradle.java'
   id 'java-gradle-plugin'
   id 'com.fizzpod.sweeney' version '4.0.0'
+  id 'com.github.ksoichiro.build.info' version '0.2.0'
 }
 
 wrapper {
@@ -12,4 +13,12 @@ wrapper {
 sweeney {
   enforce type: 'jdk', expect: '[1.8,)'
   enforce 'gradle:[5.0,)'
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  testCompile "org.junit.jupiter:junit-jupiter:${junitVersion}"
 }

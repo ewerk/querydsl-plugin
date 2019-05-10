@@ -7,7 +7,7 @@ classes within a project. Different annotation processors can be activated via t
 configuration. The plugin will not manage 3rd party libraries. It is still up to the end user
 to add the required dependencies like Hibernate, Spring Data Mongo and the needed Querydsl libs.
 
-Note: from release 1.0.6 this plugin requires Querydsl 4.x dependencies.
+Note: from release 5.0.0 this plugin requires Gradle 5 Querydsl 4.x dependencies.
 
 Please have a look at the plugins [change log](change_log.md).
 
