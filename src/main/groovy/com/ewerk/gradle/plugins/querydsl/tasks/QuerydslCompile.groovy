@@ -19,11 +19,14 @@ import org.gradle.api.plugins.WarPlugin
 import org.gradle.api.tasks.compile.JavaCompile
 
 /**
- * Compiles the meta model using querydsl annotation processors supplied by the querydsl extension configuration
+ * Compiles the meta model using querydsl annotation processors supplied by the querydsl extension
+ * configuration.
  *
- * @author holgerstolzenberg , griffio
+ * @author holgerstolzenberg
+ * @author griffio
  * @since 1.0.3
  */
+@SuppressWarnings("JavaStylePropertiesInvocation")
 class QuerydslCompile extends JavaCompile {
 
   QuerydslCompile() {
