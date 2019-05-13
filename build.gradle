@@ -1,7 +1,8 @@
 plugins {
   id 'org.gradle.wrapper'
   id 'org.gradle.java'
-  id 'java-gradle-plugin'
+  id 'org.gradle.groovy'
+  id 'org.gradle.java-gradle-plugin'
   id 'com.fizzpod.sweeney' version '4.0.0'
   id 'com.github.ksoichiro.build.info' version '0.2.0'
   id 'com.gradle.plugin-publish' version '0.10.1'
@@ -21,7 +22,8 @@ repositories {
 }
 
 dependencies {
-  testCompile "org.junit.jupiter:junit-jupiter:${junitVersion}"
+  testImplementation "junit:junit:${junitVersion}"
+  testImplementation 'org.assertj:assertj-core:3.12.2'
 }
 
 test {
