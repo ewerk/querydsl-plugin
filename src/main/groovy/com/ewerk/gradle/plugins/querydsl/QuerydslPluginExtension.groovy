@@ -32,6 +32,7 @@ class QuerydslPluginExtension {
   static String QUERYDSL_PROC = "com.querydsl.apt.QuerydslAnnotationProcessor"
   static String ROO_PROC = "com.querydsl.apt.roo.RooAnnotationProcessor"
   static String SPRING_DATA_MONGO_PROC = "org.springframework.data.mongodb.repository.support.MongoAnnotationProcessor"
+  static String LOMBOK_PROC = 'lombok.launch.AnnotationProcessorHider$AnnotationProcessor'
 
   static final String NAME = "querydsl"
   static final String DEFAULT_QUERYDSL_SOURCES_DIR = "src/querydsl/java"
@@ -47,6 +48,7 @@ class QuerydslPluginExtension {
   boolean roo = false
   boolean springDataMongo = false
   boolean querydslDefault = false
+  boolean lombok = false
 
   List aptOptions = []
 
@@ -80,6 +82,10 @@ class QuerydslPluginExtension {
 
     if (springDataMongo) {
       processors << SPRING_DATA_MONGO_PROC
+    }
+
+    if (lombok) {
+      processors << LOMBOK_PROC
     }
 
     return processors.join(",")
