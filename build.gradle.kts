@@ -35,18 +35,18 @@ tasks {
     minHeapSize = "128m"
     testLogging.events = setOf(TestLogEvent.FAILED, TestLogEvent.SKIPPED, TestLogEvent.PASSED)
   }
-}
 
-val sourceJar = tasks.create<Jar>("sourceJar") {
-  from(sourceSets["main"].allSource)
-  classifier = "sources"
+  register<Jar>("sourceJar") {
+    from(sourceSets["main"].allSource)
+    classifier = "sources"
+  }
 }
 
 publishing {
   publications {
     register<MavenPublication>("thePlugin") {
       from(components["java"])
-      artifact(sourceJar)
+      artifact(tasks["sourceJar"])
       pom {
         name.set("EWERK Querydsl Plugin")
         url.set("https://github.com/ewerk/querydsl-plugin")
