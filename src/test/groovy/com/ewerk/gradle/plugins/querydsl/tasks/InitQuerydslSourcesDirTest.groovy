@@ -19,8 +19,8 @@ import com.ewerk.gradle.plugins.querydsl.QuerydslPlugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
 import org.gradle.testfixtures.ProjectBuilder
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 import static org.assertj.core.api.Assertions.*
 
@@ -33,7 +33,7 @@ class InitQuerydslSourcesDirTest {
   private Project project
   private InitQuerydslSourcesDir createTask
 
-  @Before
+  @BeforeEach
   void setup() {
     project = ProjectBuilder.builder().build()
     project.plugins.apply(QuerydslPlugin.class)

@@ -22,8 +22,8 @@ import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDepen
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.api.plugins.WarPlugin
 import org.gradle.testfixtures.ProjectBuilder
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 import static org.assertj.core.api.Assertions.assertThat
 
@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat
 class QuerydslPluginTest {
   private Project project
 
-  @Before
+  @BeforeEach
   void setup() {
     project = ProjectBuilder.builder().build()
     project.plugins.apply(QuerydslPlugin.class)

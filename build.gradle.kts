@@ -22,7 +22,10 @@ repositories {
 dependencies {
   val junitVersion: String by project
 
-  testImplementation("junit:junit:$junitVersion")
+  implementation(platform("org.junit:junit-bom:$junitVersion"))
+
+  testImplementation("org.junit.jupiter:junit-jupiter-api")
+  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
   testImplementation("org.assertj:assertj-core:3.12.2")
 }
 
@@ -32,6 +35,8 @@ tasks {
   }
 
   named<Test>("test") {
+    useJUnitPlatform()
+
     minHeapSize = "128m"
     testLogging.events = setOf(TestLogEvent.FAILED, TestLogEvent.SKIPPED, TestLogEvent.PASSED)
   }

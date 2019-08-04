@@ -16,8 +16,8 @@
 
 package com.ewerk.gradle.plugins.querydsl
 
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 import static org.assertj.core.api.Assertions.assertThat
 
@@ -30,7 +30,7 @@ class QuerydslPluginExtensionTest {
 
   private QuerydslPluginExtension extension
 
-  @Before
+  @BeforeEach
   void setup() {
     extension = new QuerydslPluginExtension()
   }
