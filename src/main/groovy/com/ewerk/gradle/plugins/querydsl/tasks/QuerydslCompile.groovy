@@ -45,6 +45,7 @@ class QuerydslCompile extends JavaCompile {
     }
 
     project.afterEvaluate {
+      options.annotationProcessorPath = project.configurations.findByName("querydsl")
       setClasspath(project.configurations.querydsl)
       File file = project.file(sourcesDir)
       setDestinationDir(file)

@@ -37,7 +37,7 @@ import org.gradle.api.plugins.JavaPlugin
  * @author holgerstolzenberg , iboyko
  * @since 1.0.0
  */
-class QuerydslPlugin implements Plugin<Project> {
+class  QuerydslPlugin implements Plugin<Project> {
 
   public static final String TASK_GROUP = "Querydsl"
 
@@ -109,7 +109,7 @@ class QuerydslPlugin implements Plugin<Project> {
     def library = project.extensions.querydsl.library
     LOG.info("Querydsl library: {}", library)
     project.dependencies {
-      implementation library
+      querydsl library
     }
   }
 
