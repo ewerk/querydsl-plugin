@@ -35,10 +35,9 @@ class QuerydslPluginExtension {
   static String LOMBOK_PROC = 'lombok.launch.AnnotationProcessorHider$AnnotationProcessor'
 
   static final String NAME = "querydsl"
-  static final String DEFAULT_QUERYDSL_SOURCES_DIR = "src/querydsl/java"
   static final String DEFAULT_LIBRARY = "com.querydsl:querydsl-apt:4.1.4"
 
-  String querydslSourcesDir = DEFAULT_QUERYDSL_SOURCES_DIR
+  String querydslSourcesDir
   String library = DEFAULT_LIBRARY
 
   boolean jpa = false

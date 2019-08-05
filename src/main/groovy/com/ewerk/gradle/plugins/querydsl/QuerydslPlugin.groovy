@@ -16,7 +16,6 @@
 package com.ewerk.gradle.plugins.querydsl
 
 import com.ewerk.gradle.plugins.querydsl.tasks.CleanQuerydslSourcesDir
-import com.ewerk.gradle.plugins.querydsl.tasks.InitQuerydslSourcesDir
 import com.ewerk.gradle.plugins.querydsl.tasks.QuerydslCompile
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -63,22 +62,25 @@ class QuerydslPlugin implements Plugin<Project> {
     // add 'Querydsl' DSL extension
     project.extensions.create(QuerydslPluginExtension.NAME, QuerydslPluginExtension)
 
+    File querydslSourcesDir = querydslSourcesDir(project)
+
     // add new tasks for creating/cleaning the auto-value sources dir
-    project.task(type: CleanQuerydslSourcesDir, "cleanQuerydslSourcesDir")
-    project.task(type: InitQuerydslSourcesDir, "initQuerydslSourcesDir")
+    project.tasks.register("cleanQuerydslSourcesDir", CleanQuerydslSourcesDir) {
+      sourcesDir = querydslSourcesDir
+    }
 
     // make 'clean' depend clean ing querydsl sources
     project.tasks.clean.dependsOn project.tasks.cleanQuerydslSourcesDir
 
-    project.task(type: QuerydslCompile, "compileQuerydsl")
-    project.tasks.compileQuerydsl.dependsOn project.tasks.initQuerydslSourcesDir
+    project.tasks.register("compileQuerydsl", QuerydslCompile) {
+      sourcesDir = querydslSourcesDir
+    }
+
     project.tasks.compileJava.dependsOn project.tasks.compileQuerydsl
 
     project.afterEvaluate {
-      File querydslSourcesDir = querydslSourcesDir(project)
-
       addLibrary(project)
-      addSourceSet(project, querydslSourcesDir)
+      configureSourceSet(project, querydslSourcesDir)
       registerSourceAtCompileJava(project, querydslSourcesDir)
       applyCompilerOptions(project)
     }
@@ -107,23 +109,21 @@ class QuerydslPlugin implements Plugin<Project> {
     def library = project.extensions.querydsl.library
     LOG.info("Querydsl library: {}", library)
     project.dependencies {
-      compile library
+      implementation library
     }
   }
 
-  private void addSourceSet(Project project, File sourcesDir) {
+  private void configureSourceSet(Project project, File sourcesDir) {
     LOG.info("Create source set 'querydsl'.")
-
-    project.sourceSets {
-      querydsl {
-        java.srcDirs = [sourcesDir]
-      }
+    project.sourceSets.main.java {
+      srcDirs += sourcesDir
     }
   }
 
   private static File querydslSourcesDir(Project project) {
-    String path = project.extensions.querydsl.querydslSourcesDir
-    File querydslSourcesDir = project.file(path)
+    File querydslSourcesDir = project.extensions.querydsl.querydslSourcesDir != null ?
+      project.file(project.extensions.querydsl.querydslSourcesDir) :
+      project.file("${project.buildDir}/generated/querydsl")
     LOG.info("Querydsl sources dir: {}", querydslSourcesDir.absolutePath)
     return querydslSourcesDir
   }

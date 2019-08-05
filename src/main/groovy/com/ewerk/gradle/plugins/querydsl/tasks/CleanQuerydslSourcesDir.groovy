@@ -33,6 +33,8 @@ class CleanQuerydslSourcesDir extends DefaultTask {
 
   static final String DESCRIPTION = "Cleans the Querydsl sources dir."
 
+  File sourcesDir
+
   CleanQuerydslSourcesDir() {
     this.group = QuerydslPlugin.TASK_GROUP
     this.description = DESCRIPTION
@@ -43,10 +45,8 @@ class CleanQuerydslSourcesDir extends DefaultTask {
   cleanSourceFolders() {
     LOG.info("Clean Querydsl source dir")
 
-    project.sourceSets.querydsl.java.srcDirs.each { dir ->
-      if (dir.exists()) {
-        dir.deleteDir()
-      }
+    if (sourcesDir.exists()) {
+      sourcesDir.deleteDir()
     }
   }
 }
