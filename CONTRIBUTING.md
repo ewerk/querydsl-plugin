@@ -12,7 +12,7 @@ feature branch for your own commits. When you are done create a
 If you are creating a PR from an issue, see [closing issues via commit messages](https://help.github.com/articles/closing-issues-via-commit-messages/).
 
  **Some guidelines**
-* Plugins are developed for Java 1.9+ compatibility
+* Plugins are developed for Java 1.8+ compatibility
 * Please review the plugin for naming conventions and source code layout
 * Java source code in this project is currently indented with 2 spaces
 * Update any plugin `README.md` or `CHANGE_LOG.md` to reflect the latest values that may now be relevant after your changes
