@@ -45,6 +45,11 @@ tasks {
     from(sourceSets["main"].allSource)
     classifier = "sources"
   }
+
+  withType<JavaCompile> {
+    sourceCompatibility = "1.8"
+    targetCompatibility = "1.8"
+  }
 }
 
 publishing {
