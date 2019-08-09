@@ -15,7 +15,7 @@
  */
 package com.ewerk.gradle.plugins.querydsl
 
-import com.ewerk.gradle.plugins.querydsl.tasks.InitQuerydslSourcesDir
+import com.ewerk.gradle.plugins.querydsl.tasks.CleanQuerydslSourcesDir
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency
@@ -79,12 +79,6 @@ class QuerydslPluginTest {
   }
 
   @Test
-  void testInitTaskIsAvailable() {
-    Task initTask = project.tasks.initQuerydslSourcesDir
-    assertThat(initTask).isNotNull()
-  }
-
-  @Test
   void testCleanTaskAreAvailable() {
     Task cleanTask = project.tasks.cleanQuerydslSourcesDir
     assertThat(cleanTask).isNotNull()
@@ -92,8 +86,8 @@ class QuerydslPluginTest {
 
   @Test
   void testTaskTypes() {
-    Task initTask = project.tasks.initQuerydslSourcesDir
-    assertThat(initTask).isInstanceOf(InitQuerydslSourcesDir.class)
+    Task initTask = project.tasks.cleanQuerydslSourcesDir
+    assertThat(initTask).isInstanceOf(CleanQuerydslSourcesDir.class)
   }
 
   @Test
