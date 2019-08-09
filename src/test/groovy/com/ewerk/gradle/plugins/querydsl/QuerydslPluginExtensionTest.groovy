@@ -36,12 +36,6 @@ class QuerydslPluginExtensionTest {
   }
 
   @Test
-  void testDefaultGeneratedSourcesDirIsSet() {
-    String defaultDir = QuerydslPluginExtension.DEFAULT_QUERYDSL_SOURCES_DIR
-    assertThat(extension.querydslSourcesDir as File).isEqualTo(new File(defaultDir))
-  }
-
-  @Test
   void testDefaultLibraryIsSet() {
     def defaultLibrary = QuerydslPluginExtension.DEFAULT_LIBRARY
     assertThat(extension.library).isEqualTo(defaultLibrary)

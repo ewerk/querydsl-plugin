@@ -28,11 +28,11 @@ import org.gradle.api.plugins.JavaPlugin
  * classpath.
  *
  * The plugin registers the extension 'querydsl' so that plugin specific configuration can
- * be overwritten within the build sScript. Please see the readme doc on Github for details on that.
+ * be overwritten within the build script. Please see the readme doc on Github for details on that.
  *
  * The plugin will generate an additional source directory into where the querydsl
  * classes will be compiled, so that they can be ignored from SCM commits. Per default, this will
- * be {@link QuerydslPluginExtension#DEFAULT_QUERYDSL_SOURCES_DIR}.
+ * be $buildDir/generated/querydsl.
  *
  * @author holgerstolzenberg , iboyko
  * @since 1.0.0
