@@ -37,7 +37,6 @@ class QuerydslPluginExtension {
   static final String NAME = "querydsl"
   static final String DEFAULT_LIBRARY = "com.querydsl:querydsl-apt:4.1.4"
 
-  String querydslSourcesDir
   String library = DEFAULT_LIBRARY
 
   boolean jpa = false

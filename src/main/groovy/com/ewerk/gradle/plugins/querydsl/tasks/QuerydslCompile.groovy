@@ -28,27 +28,4 @@ import org.gradle.api.tasks.compile.JavaCompile
  */
 @SuppressWarnings("JavaStylePropertiesInvocation")
 class QuerydslCompile extends JavaCompile {
-
-  File sourcesDir
-
-  QuerydslCompile() {
-    setSource(project.sourceSets.main.java)
-
-    if (project.plugins.hasPlugin(WarPlugin.class)) {
-      project.configurations {
-        querydsl.extendsFrom implementation, providedRuntime, providedCompile
-      }
-    } else {
-      project.configurations {
-        querydsl.extendsFrom implementation
-      }
-    }
-
-    project.afterEvaluate {
-      options.annotationProcessorPath = project.configurations.findByName("querydsl")
-      setClasspath(project.configurations.querydsl)
-      File file = project.file(sourcesDir)
-      setDestinationDir(file)
-    }
-  }
 }
