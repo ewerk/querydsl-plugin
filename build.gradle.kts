@@ -20,9 +20,7 @@ repositories {
 }
 
 dependencies {
-  val junitVersion: String by project
-
-  implementation(platform("org.junit:junit-bom:$junitVersion"))
+  testImplementation(platform("org.junit:junit-bom:5.5.1"))
 
   testImplementation("org.junit.jupiter:junit-jupiter-api")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
