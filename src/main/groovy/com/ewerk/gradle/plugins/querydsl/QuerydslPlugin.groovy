@@ -15,13 +15,17 @@
  */
 package com.ewerk.gradle.plugins.querydsl
 
-import com.ewerk.gradle.plugins.querydsl.tasks.CleanQuerydslSourcesDir
 import com.ewerk.gradle.plugins.querydsl.tasks.QuerydslCompile
+import groovy.transform.CompileStatic
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.artifacts.Configuration
 import org.gradle.api.logging.Logger
 import org.gradle.api.logging.Logging
 import org.gradle.api.plugins.JavaPlugin
+import org.gradle.api.plugins.JavaPluginConvention
+import org.gradle.api.tasks.SourceSet
+import org.gradle.api.tasks.compile.JavaCompile
 
 /**
  * This plugin can be used to easily create Querydsl Q-classes and attach them to the project
@@ -37,9 +41,8 @@ import org.gradle.api.plugins.JavaPlugin
  * @author holgerstolzenberg , iboyko
  * @since 1.0.0
  */
+@CompileStatic
 class  QuerydslPlugin implements Plugin<Project> {
-
-  public static final String TASK_GROUP = "Querydsl"
 
   private static final Logger LOG = Logging.getLogger(QuerydslPlugin.class)
 
@@ -60,71 +63,62 @@ class  QuerydslPlugin implements Plugin<Project> {
     }
 
     // add 'Querydsl' DSL extension
-    project.extensions.create(QuerydslPluginExtension.NAME, QuerydslPluginExtension)
+    def querydslPlugin = project.extensions.create(QuerydslPluginExtension.NAME, QuerydslPluginExtension) as QuerydslPluginExtension
 
-    File querydslSourcesDir = querydslSourcesDir(project)
+    def javaPlugin = project.convention.plugins.get("java") as JavaPluginConvention
 
-    // add new tasks for creating/cleaning the auto-value sources dir
-    project.tasks.register("cleanQuerydslSourcesDir", CleanQuerydslSourcesDir) {
-      sourcesDir = querydslSourcesDir
-    }
-
-    // make 'clean' depend clean ing querydsl sources
-    project.tasks.clean.dependsOn project.tasks.cleanQuerydslSourcesDir
-
-    project.tasks.register("compileQuerydsl", QuerydslCompile) {
-      sourcesDir = querydslSourcesDir
-    }
-
-    project.tasks.compileJava.dependsOn project.tasks.compileQuerydsl
-
-    project.afterEvaluate {
-      addLibrary(project)
-      configureSourceSet(project, querydslSourcesDir)
-      registerSourceAtCompileJava(project, querydslSourcesDir)
-      applyCompilerOptions(project)
+    javaPlugin.sourceSets.configureEach { SourceSet it ->
+//      if (it.name == "main") {
+        configureSourceSet(it, project, querydslPlugin)
+//      }
     }
   }
 
-  private static void applyCompilerOptions(Project project) {
-    project.tasks.compileQuerydsl.options.compilerArgs += [
+  private void configureSourceSet(SourceSet sourceSet, Project project, QuerydslPluginExtension querydslPlugin) {
+    def configurations = project.configurations
+
+    addLibrary(sourceSet, project, querydslPlugin)
+    configurations.getByName(sourceSet.annotationProcessorConfigurationName) { Configuration it ->
+      it.extendsFrom(configurations.getByName(sourceSet.implementationConfigurationName))
+    }
+    configureTasks(sourceSet, project, querydslPlugin)
+
+  }
+
+  private static void configureTasks(SourceSet sourceSet, Project project, QuerydslPluginExtension querydslPlugin) {
+    def compileTask = project.tasks.getByName(sourceSet.compileJavaTaskName) as JavaCompile
+    def querydslCompileTask = project.tasks.register(sourceSet.getTaskName("compile", "Querydsl"), QuerydslCompile)
+
+    def destinationDir = compileTask.options.annotationProcessorGeneratedSourcesDirectory
+
+    sourceSet.java.srcDir(destinationDir)
+
+    querydslCompileTask.configure { JavaCompile task ->
+      task.classpath = sourceSet.compileClasspath
+      task.options.compilerArgs += [
         "-proc:only",
-        "-processor", project.querydsl.processors()
-    ]
+        "-processor", querydslPlugin.processors()
+      ]
+      task.options.annotationProcessorGeneratedSourcesDirectory = destinationDir
+      task.options.annotationProcessorPath = sourceSet.annotationProcessorPath
 
-    if (project.querydsl.aptOptions.size() > 0) {
-      for (aptOption in project.querydsl.aptOptions) {
-        project.tasks.compileQuerydsl.options.compilerArgs << "-A" + aptOption
+      if (querydslPlugin.aptOptions.size() > 0) {
+        for (aptOption in querydslPlugin.aptOptions) {
+          task.options.compilerArgs << "-A" + aptOption
+        }
       }
+
+      task.source(sourceSet.java)
+      task.destinationDir = sourceSet.java.outputDir
+    }
+
+    compileTask.configure { JavaCompile task ->
+      task.dependsOn += querydslCompileTask
     }
   }
 
-  private void registerSourceAtCompileJava(Project project, File querydslSourcesDir) {
-    project.compileJava {
-      source querydslSourcesDir
-    }
-  }
-
-  private void addLibrary(Project project) {
-    def library = project.extensions.querydsl.library
-    LOG.info("Querydsl library: {}", library)
-    project.dependencies {
-      querydsl library
-    }
-  }
-
-  private void configureSourceSet(Project project, File sourcesDir) {
-    LOG.info("Create source set 'querydsl'.")
-    project.sourceSets.main.java {
-      srcDirs += sourcesDir
-    }
-  }
-
-  private static File querydslSourcesDir(Project project) {
-    File querydslSourcesDir = project.extensions.querydsl.querydslSourcesDir != null ?
-      project.file(project.extensions.querydsl.querydslSourcesDir) :
-      project.file("${project.buildDir}/generated/querydsl")
-    LOG.info("Querydsl sources dir: {}", querydslSourcesDir.absolutePath)
-    return querydslSourcesDir
+  private void addLibrary(SourceSet sourceSet, Project project, QuerydslPluginExtension querydslPlugin) {
+    LOG.info("Querydsl library: {}", querydslPlugin.library)
+    project.dependencies.add(sourceSet.annotationProcessorConfigurationName, querydslPlugin.library)
   }
 }
