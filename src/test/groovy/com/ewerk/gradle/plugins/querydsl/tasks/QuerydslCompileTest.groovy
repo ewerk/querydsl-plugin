@@ -19,7 +19,7 @@ import com.ewerk.gradle.plugins.querydsl.QuerydslPlugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceTask
 import org.gradle.testfixtures.ProjectBuilder
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 import static org.assertj.core.api.Assertions.assertThat
 
