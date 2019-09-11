@@ -25,7 +25,7 @@ repository with a version labeled at the `SNAPSHOT` build located in the `gradle
 
 To do this, use the `install` task
 ```
-../gradlew build install
+./gradlew build publishToMavenLocal
 ```
 
 It is recommended to test any changes against the [gradle-plugins-samples](https://github.com/ewerk/gradle-plugins-samples)
