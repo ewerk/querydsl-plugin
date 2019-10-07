@@ -15,11 +15,13 @@
  */
 package com.ewerk.gradle.plugins.querydsl
 
+import com.ewerk.gradle.plugins.querydsl.tasks.QuerydslCompile
 import org.gradle.api.Project
-import org.gradle.api.Task
 import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency
 import org.gradle.api.plugins.JavaPlugin
+import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.plugins.WarPlugin
+import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -42,15 +44,17 @@ class QuerydslPluginTest {
     project.plugins.apply(QuerydslPlugin.class)
     project.plugins.apply(WarPlugin.class)
 
-    project.extensions.querydsl.jpa = true
-    project.extensions.querydsl.jdo = true
-    project.extensions.querydsl.roo = true
-    project.extensions.querydsl.hibernate = true
-    project.extensions.querydsl.morphia = true
-    project.extensions.querydsl.springDataMongo = true
-    project.extensions.querydsl.querydslDefault = true
+    def extension = project.extensions.getByType(QuerydslPluginExtension)
 
-    project.extensions.querydsl.aptOptions = ['querydsl.entityAccessors=true', 'querydsl.useFields=false']
+    extension.jpa = true
+    extension.jdo = true
+    extension.hibernate = true
+    extension.roo = true
+    extension.morphia = true
+    extension.springDataMongo = true
+    extension.querydslDefault = true
+
+    extension.aptOptions = ['querydsl.entityAccessors=true', 'querydsl.useFields=false']
   }
 
   @Test
@@ -79,26 +83,42 @@ class QuerydslPluginTest {
     assertThat(project.extensions.querydsl.processors()).isNotNull()
   }
 
-//  @Test
-//  void testCleanTaskAreAvailable() {
-//    Task cleanTask = project.tasks.cleanQuerydslSourcesDir
-//    assertThat(cleanTask).isNotNull()
-//  }
-
-//  @Test
-//  void testTaskTypes() {
-//    Task initTask = project.tasks.cleanQuerydslSourcesDir
-//    assertThat(initTask).isInstanceOf(CleanQuerydslSourcesDir.class)
-//  }
-//
   @Test
   void testAfterEvaluate() {
     project.evaluate()
 
-    println("get")
     DefaultExternalModuleDependency lib = project.configurations.annotationProcessor.dependencies[0] as DefaultExternalModuleDependency
     String id = lib.group + ":" + lib.name + ":" + lib.version
 
     assertThat(id).isEqualTo(QuerydslPluginExtension.DEFAULT_LIBRARY)
+  }
+
+  @Test
+  void testAfterEvaluateShouldAddTasksToSourceSets() {
+    def javaPlugin = project.convention.plugins.get("java") as JavaPluginConvention
+    javaPlugin.sourceSets.register("custom")
+
+    project.evaluate()
+
+    assertThat(project.tasks.findByName("compileQuerydsl")).isNotNull()
+    assertThat(project.tasks.findByName("compileTestQuerydsl")).isNotNull()
+    assertThat(project.tasks.findByName("compileCustomQuerydsl")).isNotNull()
+  }
+
+  @Test
+  void testAfterEvaluateShouldConfigureCompileTask() {
+    project.evaluate()
+
+    def javaPlugin = project.convention.plugins.get("java") as JavaPluginConvention
+    def sourceSet = javaPlugin.sourceSets.getByName("main")
+
+    def javaCompileTask = project.tasks.getByName("compileJava") as JavaCompile
+    def querydslCompileTask = project.tasks.getByName("compileQuerydsl") as QuerydslCompile
+    assertThat(querydslCompileTask.classpath).isEqualTo(sourceSet.compileClasspath)
+
+    assertThat(querydslCompileTask.options.annotationProcessorGeneratedSourcesDirectory)
+      .isEqualTo(javaCompileTask.options.annotationProcessorGeneratedSourcesDirectory)
+    assertThat(querydslCompileTask.options.annotationProcessorPath).isEqualTo(sourceSet.annotationProcessorPath)
+    assertThat(querydslCompileTask.destinationDir).isEqualTo(sourceSet.java.outputDir)
   }
 }

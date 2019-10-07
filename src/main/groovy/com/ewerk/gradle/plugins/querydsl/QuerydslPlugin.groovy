@@ -68,9 +68,7 @@ class  QuerydslPlugin implements Plugin<Project> {
     def javaPlugin = project.convention.plugins.get("java") as JavaPluginConvention
 
     javaPlugin.sourceSets.configureEach { SourceSet it ->
-//      if (it.name == "main") {
         configureSourceSet(it, project, querydslPlugin)
-//      }
     }
   }
 
