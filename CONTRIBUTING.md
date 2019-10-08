@@ -23,9 +23,9 @@ If you are creating a PR from an issue, see [closing issues via commit messages]
 From your plugin development branch, your latest changes can be installed to your local maven (`.m2`) 
 repository with a version labeled at the `SNAPSHOT` build located in the `gradle.properties`.
 
-To do this, use the `install` task
+To do this, use the following task
 ```
-../gradlew build install
+./gradlew build publishToMavenLocal
 ```
 
 It is recommended to test any changes against the [gradle-plugins-samples](https://github.com/ewerk/gradle-plugins-samples)
