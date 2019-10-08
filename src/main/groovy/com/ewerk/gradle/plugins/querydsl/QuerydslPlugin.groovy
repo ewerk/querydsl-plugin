@@ -65,7 +65,7 @@ class  QuerydslPlugin implements Plugin<Project> {
     // add 'Querydsl' DSL extension
     def querydslPlugin = project.extensions.create(QuerydslPluginExtension.NAME, QuerydslPluginExtension) as QuerydslPluginExtension
 
-    def javaPlugin = project.convention.plugins.get("java") as JavaPluginConvention
+    def javaPlugin = project.convention.plugins["java"] as JavaPluginConvention
 
     javaPlugin.sourceSets.configureEach { SourceSet it ->
         configureSourceSet(it, project, querydslPlugin)
