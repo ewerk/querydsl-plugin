@@ -63,24 +63,22 @@ class  QuerydslPlugin implements Plugin<Project> {
     }
 
     // add 'Querydsl' DSL extension
-    def querydslPlugin = project.extensions.create(QuerydslPluginExtension.NAME, QuerydslPluginExtension) as QuerydslPluginExtension
+    def querydslPluginExtension = project.extensions.create(QuerydslPluginExtension.NAME, QuerydslPluginExtension) as QuerydslPluginExtension
 
     def javaPlugin = project.convention.plugins["java"] as JavaPluginConvention
-
     javaPlugin.sourceSets.configureEach { SourceSet it ->
-        configureSourceSet(it, project, querydslPlugin)
+        configureSourceSet(it, project, querydslPluginExtension)
     }
   }
 
-  private void configureSourceSet(SourceSet sourceSet, Project project, QuerydslPluginExtension querydslPlugin) {
+  private void configureSourceSet(SourceSet sourceSet, Project project, QuerydslPluginExtension extension) {
     def configurations = project.configurations
 
-    addLibrary(sourceSet, project, querydslPlugin)
+    addLibrary(sourceSet, project, extension)
     configurations.getByName(sourceSet.annotationProcessorConfigurationName) { Configuration it ->
       it.extendsFrom(configurations.getByName(sourceSet.implementationConfigurationName))
     }
-    configureTasks(sourceSet, project, querydslPlugin)
-
+    configureTasks(sourceSet, project, extension)
   }
 
   private static void configureTasks(SourceSet sourceSet, Project project, QuerydslPluginExtension querydslPlugin) {

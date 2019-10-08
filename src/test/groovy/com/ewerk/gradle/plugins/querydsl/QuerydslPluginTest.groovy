@@ -95,7 +95,7 @@ class QuerydslPluginTest {
 
   @Test
   void testAfterEvaluateShouldAddTasksToSourceSets() {
-    def javaPlugin = project.convention.plugins.get("java") as JavaPluginConvention
+    def javaPlugin = project.convention.plugins["java"] as JavaPluginConvention
     javaPlugin.sourceSets.register("custom")
 
     project.evaluate()
@@ -109,7 +109,7 @@ class QuerydslPluginTest {
   void testAfterEvaluateShouldConfigureCompileTask() {
     project.evaluate()
 
-    def javaPlugin = project.convention.plugins.get("java") as JavaPluginConvention
+    def javaPlugin = project.convention.plugins["java"] as JavaPluginConvention
     def sourceSet = javaPlugin.sourceSets.getByName("main")
 
     def javaCompileTask = project.tasks.getByName("compileJava") as JavaCompile
